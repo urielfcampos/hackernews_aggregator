@@ -8,7 +8,7 @@ defmodule HackerNewsAggregatorEx.Api.Controllers.TopStories do
     conn = fetch_query_params(conn)
 
     page =
-      Map.get(conn.query_params, "page", 1)
+      Map.get(conn.query_params, "page", "1")
       |> String.to_integer()
 
     handle_response(conn, load_stories(page))
