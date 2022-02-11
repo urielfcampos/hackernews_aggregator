@@ -65,4 +65,7 @@ COPY --from=builder --chown=nobody:root /app/_build/prod/rel/hacker_news_aggrega
 
 USER nobody
 
-CMD /app/bin/hacker_news_aggregator_ex start
+RUN set -eux; \
+  ln -nfs /app/bin/hacker_news_aggregator_ex /app/entry
+
+CMD /app/entry start
