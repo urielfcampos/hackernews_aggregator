@@ -3,6 +3,7 @@ defmodule HackerNewsAggregatorEx.Api.Controllers.TopStories do
 
   alias HackerNewsAggregatorEx.DB
 
+  @spec index(Plug.Conn.t(), any) :: Plug.Conn.t()
   def index(conn, _opts) do
     conn = fetch_query_params(conn)
 

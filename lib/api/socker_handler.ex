@@ -1,6 +1,7 @@
 defmodule HackerNewsAggregatorEx.SocketHandler do
   alias HackerNewsAggregatorEx.DB
   @behaviour :cowboy_websocket
+
   def init(request, _state) do
     state = %{registry_key: request.path}
     {:cowboy_websocket, request, state}

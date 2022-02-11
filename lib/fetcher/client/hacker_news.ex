@@ -7,6 +7,9 @@ defmodule HackerNewsAggregatorEx.Fetcher.HackerNews do
   plug(Tesla.Middleware.Headers)
   plug(Tesla.Middleware.JSON)
 
+  @spec get_top_stories ::
+          {:error, nil | integer}
+          | %{current_page: any, pages: [list], total_pages: non_neg_integer}
   def get_top_stories do
     case get("/topstories.json") do
       {:ok, %{status: 200, body: body}} ->
@@ -21,6 +24,8 @@ defmodule HackerNewsAggregatorEx.Fetcher.HackerNews do
     end
   end
 
+  @spec get_stories(any) ::
+          {:error, nil | integer} | %{:api_uri => <<_::56, _::_*8>>, optional(any) => any}
   def get_stories(id) do
     IO.puts("fetching story #{id}")
 

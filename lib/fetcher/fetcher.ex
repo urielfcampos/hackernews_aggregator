@@ -4,10 +4,12 @@ defmodule HackerNewsAggregatorEx.Fetcher do
   alias HackerNewsAggregatorEx.Fetcher.HackerNews
   alias HackerNewsAggregatorEx.DB
 
+  @spec start_link(any) :: :ignore | {:error, any} | {:ok, pid}
   def start_link(_) do
     GenServer.start_link(__MODULE__, %{})
   end
 
+  @spec init(any) :: {:ok, reference}
   def init(_) do
     timer = schedule()
 
@@ -22,6 +24,7 @@ defmodule HackerNewsAggregatorEx.Fetcher do
     {:noreply, state}
   end
 
+  @spec handle_call(:state, any) :: {:reply, any, any}
   def handle_call(:state, state) do
     {:reply, state, state}
   end

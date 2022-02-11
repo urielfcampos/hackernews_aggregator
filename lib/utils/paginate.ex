@@ -1,5 +1,7 @@
 defmodule HackerNewsAggregatorEx.Utils do
   @page_size 10
+
+  @spec paginate(any) :: %{current_page: any, pages: [list], total_pages: non_neg_integer}
   def paginate(list) do
     pages = Enum.chunk_every(list, @page_size)
     current_page = Enum.at(pages, 0)
@@ -11,6 +13,7 @@ defmodule HackerNewsAggregatorEx.Utils do
     }
   end
 
+  @spec get_page(any, any) :: {:error, :page_not_found} | {:ok, any}
   def get_page(page, %{total_pages: total_pages} = pagination) when page <= total_pages do
     page = page - 1
     current_page = Enum.at(pagination.pages, page)

@@ -2,6 +2,7 @@ defmodule HackerNewsAggregatorEx.Api.Controllers.Story do
   import Plug.Conn
   alias HackerNewsAggregatorEx.DB
 
+  @spec show(Plug.Conn.t(), any) :: Plug.Conn.t()
   def show(%Plug.Conn{params: %{"id" => id}} = conn, _opts) do
     handle_response(conn, load_story(id))
   end

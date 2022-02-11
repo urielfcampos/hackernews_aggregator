@@ -5,15 +5,18 @@ defmodule HackerNewsAggregatorEx.DB do
     Agent.start_link(fn -> initial_state end, name: __MODULE__)
   end
 
+  @spec get_current_state :: map | list
   def get_current_state do
     Agent.get(__MODULE__, & &1)
   end
 
+  @spec set_state(map()) :: :ok
   def set_state(new_state) do
     Agent.update(__MODULE__, fn _state -> new_state end)
     notify_clients()
   end
 
+  @spec get_story(String.t()) :: nil | map()
   def get_story(id) do
     current_state = get_current_state()
     id = String.to_integer(id)
@@ -30,6 +33,7 @@ defmodule HackerNewsAggregatorEx.DB do
     end
   end
 
+  @spec get_all_stories :: nil | list
   def get_all_stories do
     current_state = get_current_state()
 
@@ -42,7 +46,7 @@ defmodule HackerNewsAggregatorEx.DB do
     end
   end
 
-  def notify_clients do
+  defp notify_clients do
     stories = get_all_stories() |> Jason.encode!()
 
     Registry.HackerNewsAggregatorEx
