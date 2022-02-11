@@ -11,6 +11,7 @@ defmodule HackerNewsAggregatorEx.DB do
 
   def set_state(new_state) do
     Agent.update(__MODULE__, fn _state -> new_state end)
+    notify_clients()
   end
 
   def get_story(id) do
@@ -27,5 +28,28 @@ defmodule HackerNewsAggregatorEx.DB do
           story["id"] == id
         end)
     end
+  end
+
+  def get_all_stories do
+    current_state = get_current_state()
+
+    case current_state do
+      [] ->
+        nil
+
+      state ->
+        List.flatten(state.pages)
+    end
+  end
+
+  def notify_clients do
+    stories = get_all_stories() |> Jason.encode!()
+
+    Registry.HackerNewsAggregatorEx
+    |> Registry.dispatch("/ws/top_stories", fn entries ->
+      for {pid, _} <- entries do
+        Process.send(pid, stories, [])
+      end
+    end)
   end
 end

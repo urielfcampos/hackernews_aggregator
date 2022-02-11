@@ -11,9 +11,16 @@ defmodule HackerNewsAggregatorEx.Application do
       {Plug.Cowboy,
        scheme: :http,
        plug: Router,
-       options: [port: 3000]},
-       Fetcher,
-       DB
+       options: [
+         port: 3000,
+         dispatch: dispatch()
+       ]},
+      Registry.child_spec(
+        keys: :duplicate,
+        name: Registry.HackerNewsAggregatorEx
+      ),
+      Fetcher,
+      DB
     ]
 
     opts = [strategy: :one_for_one, name: HackerNewsAggregatorEx.Supervisor]
@@ -21,5 +28,17 @@ defmodule HackerNewsAggregatorEx.Application do
     Logger.info("Starting API...")
 
     Supervisor.start_link(children, opts)
+  end
+
+  defp dispatch do
+    [
+      {
+        :_,
+        [
+          {"/ws/top_stories", HackerNewsAggregatorEx.SocketHandler, []},
+          {:_, Plug.Cowboy.Handler, {Router, []}}
+        ]
+      }
+    ]
   end
 end
