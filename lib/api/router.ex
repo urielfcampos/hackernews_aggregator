@@ -4,10 +4,10 @@ defmodule HackerNewsAggregatorEx.Api.Router do
   alias HackerNewsAggregatorEx.Api.Controllers.TopStories
   alias HackerNewsAggregatorEx.Api.Controllers.Story
 
-  plug Plug.Logger
-  plug :match
+  plug(Plug.Logger)
+  plug(:match)
 
-  plug :dispatch
+  plug(:dispatch)
 
   get "/top_stories" do
     TopStories.index(conn, opts)
