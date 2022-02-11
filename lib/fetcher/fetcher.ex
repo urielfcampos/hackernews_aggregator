@@ -10,7 +10,6 @@ defmodule HackerNewsAggregatorEx.Fetcher do
 
   def init(_) do
     timer = schedule()
-     HackerNewsAggregatorEx.DB.start_link([])
 
     {:ok, timer}
   end
@@ -28,6 +27,6 @@ defmodule HackerNewsAggregatorEx.Fetcher do
   end
 
   def schedule do
-    Process.send_after(self(), :fetch_stories,  30 * 1000)
+    Process.send_after(self(), :fetch_stories, 5* 60 * 1000)
   end
 end
