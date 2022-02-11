@@ -11,11 +11,11 @@ defmodule HackerNewsAggregatorEx.Utils do
     }
   end
 
-  def get_page(%{total_pages: total_pages} = pagination, page) when page <= total_pages do
+  def get_page(page, %{total_pages: total_pages} = pagination) when page <= total_pages do
     page = page - 1
     current_page = Enum.at(pagination.pages, page)
 
-    %{pagination | current_page: current_page}
+    {:ok, current_page}
   end
 
   def get_page(_, _) do
